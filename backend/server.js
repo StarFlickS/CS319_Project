@@ -10,39 +10,46 @@ app.use(bodyParser.json());
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
+  // Log the request body for debugging
+  console.log('Login request received:', req.body);
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
+
   const query = 'SELECT * FROM users WHERE username = ?';
-  db.query(query, [username], async (err, results) => {
-      if (err) throw err;
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
 
-      if (results.length === 0) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-      const user = results[0];
+    const user = results[0];
 
-      // Compare password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-          return res.status(401).json({ message: 'Invalid credentials' });
-      }
+    // Compare the plaintext password directly
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
-      // Generate JWT token
-      const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
+    // Generate a token or send a success message
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
 
-      res.json({ message: 'Login successful', token });
+    res.json({ message: 'Login successful', token });
   });
 });
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+
 
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-    db.query(query, [username, email, hashedPassword], (err, result) => {
+    db.query(query, [username, email, password], (err, result) => {
         if (err) throw err;
         res.json({ message: 'User registered successfully' });
     });

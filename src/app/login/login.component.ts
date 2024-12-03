@@ -17,23 +17,18 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onLogin(): void {
-    this.http
-      .post('http://localhost:3000/login', {
-        username: this.username,
-        password: this.password,
-      })
-      .subscribe(
-        (response: any) => {
-          console.log('Login successful:', response);
-          localStorage.setItem('token', response.token); // Save the JWT token
-          this.router.navigate(['/']); // Redirect to the home page
-        },
-        (error) => {
-          console.error('Login failed:', error);
-          alert('Invalid username or password');
-        }
-      );
-  }
+    const loginData = { username: this.username, password: this.password };
+
+    this.http.post('http://localhost:3000/login', loginData).subscribe(
+      (response: any) => {
+        console.log('Login successful:', response);
+        alert('Login successful!');
+      },
+      (error) => {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials.');
+      }
+    }
 
   navigateToRegister(): void {
     this.router.navigate(['/register']); // Redirect to the register page
