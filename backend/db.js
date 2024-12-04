@@ -82,15 +82,6 @@ connection.connect((err) => {
               return;
             }
             console.log('Data successfully inserted into the "rooms" table:', result);
-
-            // Close the connection
-            connection.end((err) => {
-              if (err) {
-                console.error('Error closing the connection:', err);
-                return;
-              }
-              console.log('MySQL connection closed');
-            });
           });
         });
       });
