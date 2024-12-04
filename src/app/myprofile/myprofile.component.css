@@ -1,0 +1,28 @@
+.profile {
+  padding: 20px;
+  width: 100%;
+  max-width: 600px; /* จำกัดความกว้าง */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  margin: auto; /* ทำให้อยู่ตรงกลาง */
+  position: relative; /* ทำให้สามารถจัดตำแหน่งปุ่มภายในกรอบนี้ได้ */
+}
+
+.edit-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  position: absolute; /* ใช้ absolute เพื่อให้ปุ่มอยู่ภายในกรอบ profile */
+  bottom: 20px;  
+  right: 20px; 
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}

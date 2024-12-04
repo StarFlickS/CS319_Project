@@ -1,0 +1,39 @@
+/* สำหรับการจัดกรอบและสไตล์ตาราง Booking */
+.booking-history {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* สำหรับการจัดระเบียบของตาราง Booking */
+  .booking-history table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .booking-history table th, .booking-history table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .booking-history table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .booking-history table td {
+    background-color: #fafafa;
+  }
+  
+  .booking-history table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .booking-history table tr:hover {
+    background-color: #f1f1f1;
+  }
+  

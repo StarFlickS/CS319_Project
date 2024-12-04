@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="myprofile.component.css">
+<div class="profile">
+  <h1>Welcome to your profile</h1>
+
+  <!-- แสดงข้อมูล ID ของผู้ใช้ -->
+  <p *ngIf="user; else loading"><strong>User ID:</strong> {{ user?.username }}</p>
+
+  <!-- แสดงข้อมูลวันที่หมดอายุ (exp) ของ token -->
+  <p *ngIf="user; else loading"><strong>Email :</strong> {{ user?.email }}</p>
+
+  <button class="edit-button" (click)="navigateToEditprofile()">
+    Edit Profile
+  </button>
+
+  <!-- ถ้าไม่มีข้อมูลผู้ใช้หรือยังไม่โหลดข้อมูล -->
+  <ng-template #loading>
+    <p>Loading your profile...</p>
+  </ng-template>
+
+  <!-- หาก token หมดอายุหรือไม่พบข้อมูลผู้ใช้ -->
+  <p *ngIf="!user">Please log in to view your profile.</p>
+
+  
+</div>
+
