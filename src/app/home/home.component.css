@@ -112,3 +112,59 @@ body {
   .login-button:hover {
     background-color: #0056b3;
   }
+
+  .navbar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #333;
+    padding: 10px;
+  }
+  
+  .nav-button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .nav-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .room-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .room-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    width: 250px;
+    text-align: left;
+  }
+  
+  .book-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .book-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .book-button:hover:not(:disabled) {
+    background-color: #218838;
+  }
+  

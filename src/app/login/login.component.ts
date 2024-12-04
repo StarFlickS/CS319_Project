@@ -28,7 +28,8 @@ export class LoginComponent {
         console.error('Login failed:', error);
         alert('Login failed. Please check your credentials.');
       }
-    }
+    )
+  }
 
   navigateToRegister(): void {
     this.router.navigate(['/register']); // Redirect to the register page
