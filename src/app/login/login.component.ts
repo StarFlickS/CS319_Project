@@ -21,21 +21,30 @@ export class LoginComponent {
 
     this.http.post('http://localhost:3000/login', loginData).subscribe(
       (response: any) => {
-        console.log('Login successful:', response);
-        localStorage.setItem('token', response.token);
-        alert('Login successful!');
-        this.router.navigate(['/profile']);
+
+        // ถอดรหัส JWT Token
+        try {
+          if (this.username === 'admin') {
+            alert('Welcome Admin!');
+            this.router.navigate(['/addroom']); // ไปยังหน้า Admin Dashboard
+          } else   {
+            console.log('Login successful:', response);
+            localStorage.setItem('token', response.token);
+            this.router.navigate(['/profile']); // ไปยังหน้าโปรไฟล์
+          } 
+        } catch (error) {
+          console.error('Error decoding token:', error);
+          alert('Invalid token. Please login again.');
+        }
       },
       (error) => {
         console.error('Login failed:', error);
-        alert('Login failed. Please check your cred entials.');
+        alert('Login failed. Please check your credentials.');
       }
-    )
-    } 
-
-    
+    );
+  }
 
   navigateToRegister(): void {
-    this.router.navigate(['/register']); // Redirect to the register page
+    this.router.navigate(['/register']); // Redirect ไปยังหน้าลงทะเบียน
   }
 }

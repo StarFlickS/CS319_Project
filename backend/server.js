@@ -8,6 +8,26 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Middleware to check for admin role
+function isAdmin(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1]; 
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret');
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    req.user = decoded; 
+    next();
+  } catch (error) {
+    console.error('Invalid token:', error);
+    res.status(401).json({ message: 'Invalid token' });
+  }
+}
+
 // Login Route
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -35,9 +55,11 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    const role = user.role
+
     // Generate a JWT Token
-    const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
-    res.json({ message: 'Login successful', token });
+    const token = jwt.sign({ id: user.id ,role:role }, 'your_jwt_secret', { expiresIn: '1h' });
+    res.json({ message: 'Login successful', token , role});
   });
 });
 
@@ -68,6 +90,80 @@ app.get('/rooms', (req, res) => {
   });
 }); 
 
+app.put('/editrooms', (req, res) => {
+  const { name, type, price, status } = req.body;
+
+  // ตรวจสอบข้อมูลที่รับเข้ามา
+  if (!name || !type || !price || !status) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  // เขียน SQL สำหรับอัปเดตข้อมูลห้อง
+  const query = 'UPDATE rooms SET name = ?, type = ?, price = ?, status = ?';
+  const values = [name, type, price, status];
+
+  // เรียกใช้ MySQL query
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (results.affectedRows > 0) {
+      return res.json({ message: 'Rooms updated successfully' });
+    } else {
+      return res.status(404).json({ message: 'No rooms found to update' });
+    }
+  });
+});
+
+
+
+
+app.post('/rooms/add', (req, res) => {
+  const { name, type, price, status } = req.body;
+
+  // ตรวจสอบข้อมูลที่ได้รับ
+  if (!name || !type || !price || !status) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  const query = 'INSERT INTO rooms (name, type, price, status, created_at) VALUES (?, ?, ?, ?, NOW())';
+  db.query(query, [name, type, price, status], (err, result) => {
+    if (err) {
+      console.error('Error inserting room:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  
+    res.json({ message: 'Room added successfully', roomId: result.insertId });
+  });
+});
+
+// Route สำหรับลบห้อง
+app.delete('/rooms/delete/:id', (req, res) => {
+  const roomId = req.body.id; 
+  console.log('Deleting room with ID:', roomId); 
+
+  // ตรวจสอบว่ามีการส่ง roomId มาหรือไม่
+  if (!roomId) {
+    return res.status(400).json({ message: 'Room ID is required' });
+  }
+
+  const query = 'DELETE FROM rooms WHERE id = ?';
+
+  db.query(query, [roomId], (err, result) => {
+    if (err) {
+      console.error('Error deleting room:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+
+    res.json({ message: 'Room deleted successfully' });
+  });
+});
 
 // User Profile Route
 app.get('/user-profile', (req, res) => {
