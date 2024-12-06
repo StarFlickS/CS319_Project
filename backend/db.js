@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '090234Top',
 });
 
 // Connect to the MySQL server
@@ -83,14 +83,7 @@ connection.connect((err) => {
             }
             console.log('Data successfully inserted into the "rooms" table:', result);
 
-            // Close the connection
-            connection.end((err) => {
-              if (err) {
-                console.error('Error closing the connection:', err);
-                return;
-              }
-              console.log('MySQL connection closed');
-            });
+            
           });
         });
       });
