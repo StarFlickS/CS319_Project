@@ -102,7 +102,8 @@ app.put('/editrooms/:id', (req, res) => {
   const query = 'UPDATE rooms SET name = ?, type = ?, price = ?, status = ? WHERE id = ?';
   const values = [name, type, price, status, roomId];  // เพิ่ม roomId ใน values เพื่อใช้ในการอัปเดต
 
-  // เรียกใช้ MySQL query
+  // เรียกใช้ MySQL query 
+  console.log(req.body)
   db.query(query, values, (err, results) => {
     if (err) {
       console.error('Database error:', err);
@@ -274,6 +275,10 @@ app.post('/user-update', (req, res) => {
     console.error('Invalid token:', error);
     res.status(401).json({ message: 'Invalid token' });
   }
+});
+const PORT = 3000;
+  app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
    
 
 });

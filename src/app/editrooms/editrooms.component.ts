@@ -56,5 +56,7 @@ export class EditroomsComponent implements OnInit {
     } else {
       alert('Please fill in all the fields');
     }
+    console.log(this.room)
   }
+  
 }
