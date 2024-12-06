@@ -68,6 +68,7 @@ export class AddroomComponent implements OnInit {
   }
 
   editRoom(roomId: number): void {
-    this.router.navigate([`/editrooms/${roomId}`]); // นำทางไปหน้า editrooms พร้อมส่ง ID
+    this.router.navigate([`/editrooms/${roomId}`]); // นำทางไปหน้า editrooms พร้อมส่ง ID 
+    
   }
 }

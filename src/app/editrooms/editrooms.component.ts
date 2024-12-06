@@ -1,50 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoomService } from '../room.service'
+import { RoomService } from '../room.service';
+import { HttpClient } from '@angular/common/http'; 
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editrooms',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './editrooms.component.html',
-  styleUrl: './editrooms.component.css'
+  styleUrls: ['./editrooms.component.css']
 })
-export class EditroomsComponent  implements OnInit {
+export class EditroomsComponent implements OnInit {
+  room: any = { name: '', type: '', price: 0, status: '' };
+  roomId: string = '';
   rooms: any[] = [];
-  room: any = { name: '', type: '', price: 0, status: '' };  // ตัวแปรสำหรับเก็บข้อมูลห้อง
-  roomId: string = '';  // ตัวแปรสำหรับเก็บห้องที่กำลังแก้ไข
-  isEditMode: boolean = false; 
 
-  constructor(private roomService: RoomService, private router: Router ,private route : ActivatedRoute) {}
+  constructor(private roomService: RoomService, private router: Router ,private route : ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
-    // รับ roomId จาก URL
+    // ดึง roomId จาก URL
     this.roomId = this.route.snapshot.paramMap.get('id') || '';
-    console.log('Room ID:', this.roomId); 
-
-    
-
-    // ดึงข้อมูลห้องตาม roomId
-    this.roomService.getRoomById(this.roomId).subscribe(
-      (data) => {
-        this.room = data; // เก็บข้อมูลของห้อง
-        console.log('Room Data:', this.room);
-        console.log('Room Name:', this.room.name); // Print ชื่อห้อง
-      },
-      (error) => {
-        console.error('Error fetching room data:', error);
+    console.log('Room ID:', this.roomId);
+  
+    // ดึงข้อมูลห้องทั้งหมดจาก API
+    this.roomService.getRooms().subscribe((data) => {
+      this.rooms = data;  // เก็บข้อมูลห้องทั้งหมดในตัวแปร rooms
+  
+      // ค้นหาห้องที่ตรงกับ roomId
+      const roomData = this.rooms.find(room => room.id === parseInt(this.roomId, 10));  // แปลงเป็นเลขฐาน 10 
+  
+      if (roomData) {
+        this.room = roomData;  // ถ้าพบข้อมูลห้องที่ตรงกับ roomId ให้เก็บข้อมูลใน this.room
+        //console.log('Room Data Found:', this.room);  // แสดงข้อมูลห้องที่พบ
+      } else {
+        console.error('Room not found for ID:', this.roomId);  // หากไม่พบห้องที่ตรงกับ roomId
+        alert('Room not found!');
       }
+    });
+  }
 
-      
-    );
-
-  }  
   onSubmit(): void {
-    // ตรวจสอบว่ามีข้อมูลห้องครบถ้วน
     if (this.room.name && this.room.type && this.room.price && this.room.status) {
-      // ส่งข้อมูลห้องทั้งหมดไปอัปเดต
       this.roomService.updateRoom(this.room).subscribe(
         (response) => {
           alert('Room updated successfully!');
@@ -52,14 +50,11 @@ export class EditroomsComponent  implements OnInit {
         },
         (error) => {
           console.error('Error updating room:', error);
+          alert('Failed to update room!');
         }
       );
     } else {
-      alert('Please fill in all the fields.');
+      alert('Please fill in all the fields');
     }
   }
-  
-  
-  
-
 }

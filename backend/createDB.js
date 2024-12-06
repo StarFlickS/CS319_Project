@@ -2,9 +2,9 @@ const mysql = require('mysql2');
 
 // Create a connection to MySQL
 const connection = mysql.createConnection({
-  host: 'localhost',      // Your MySQL host (default: localhost)
-  user: 'root',           // Your MySQL username
-  password: 'Ni0931154707',        // Your MySQL password
+  host: 'localhost',
+  user: 'root',
+  password: 'Ni0931154707',
 });
 
 // Connect to the MySQL server
@@ -14,7 +14,7 @@ connection.connect((err) => {
     return;
   }
   console.log('Connected to MySQL server');
-  
+
   // Step 1: Create the database
   const createDBQuery = 'CREATE DATABASE IF NOT EXISTS hotel_db';
   connection.query(createDBQuery, (err, result) => {
@@ -68,27 +68,25 @@ connection.connect((err) => {
           }
           console.log('Table "rooms" created or already exists');
 
-          // Close the connection
-
+          // Step 5: Insert data into the `rooms` table
           const insertRoomsQuery = `
-    INSERT INTO rooms (name, type, price, status)
-    VALUES 
-      ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
-      ('Suite Room', 'Suite', 3000.00, 'available'),
-      ('Single Room', 'Single', 800.00, 'available')
-  `;
-
-  connection.query(insertRoomsQuery, (err, result) => {
-    if (err) {
-      console.error('Error inserting data into rooms:', err);
-      return;
-    }
-    console.log('Data successfully inserted into the "rooms" table:', result);
-  });
+            INSERT INTO rooms (name, type, price, status)
+            VALUES 
+              ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
+              ('Suite Room', 'Suite', 3000.00, 'available'),
+              ('Single Room', 'Single', 800.00, 'available')
+          `;
+          connection.query(insertRoomsQuery, (err, result) => {
+            if (err) {
+              console.error('Error inserting data into "rooms" table:', err);
+              return;
+            }
+            console.log('Data successfully inserted into the "rooms" table:', result);
           });
         });
       });
     });
   });
+});
 
-  module.exports = connection;
+module.exports = connection;

@@ -33,7 +33,6 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   console.log('Login request received:', req.body);
-
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required' });
   }
@@ -56,7 +55,7 @@ app.post('/login', (req, res) => {
     }
 
     const role = user.role
-
+    
     // Generate a JWT Token
     const token = jwt.sign({ id: user.id ,role:role }, 'your_jwt_secret', { expiresIn: '1h' });
     res.json({ message: 'Login successful', token , role});
@@ -90,17 +89,18 @@ app.get('/rooms', (req, res) => {
   });
 }); 
 
-app.put('/editrooms', (req, res) => {
+app.put('/editrooms/:id', (req, res) => {
   const { name, type, price, status } = req.body;
+  const roomId = req.params.id;  // รับ roomId จาก URL parameter
 
   // ตรวจสอบข้อมูลที่รับเข้ามา
   if (!name || !type || !price || !status) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
 
-  // เขียน SQL สำหรับอัปเดตข้อมูลห้อง
-  const query = 'UPDATE rooms SET name = ?, type = ?, price = ?, status = ?';
-  const values = [name, type, price, status];
+  // เขียน SQL สำหรับอัปเดตข้อมูลห้องตาม roomId
+  const query = 'UPDATE rooms SET name = ?, type = ?, price = ?, status = ? WHERE id = ?';
+  const values = [name, type, price, status, roomId];  // เพิ่ม roomId ใน values เพื่อใช้ในการอัปเดต
 
   // เรียกใช้ MySQL query
   db.query(query, values, (err, results) => {
@@ -110,15 +110,12 @@ app.put('/editrooms', (req, res) => {
     }
 
     if (results.affectedRows > 0) {
-      return res.json({ message: 'Rooms updated successfully' });
+      return res.json({ message: 'Room updated successfully' });
     } else {
-      return res.status(404).json({ message: 'No rooms found to update' });
+      return res.status(404).json({ message: 'Room not found or no changes made' });
     }
   });
 });
-
-
-
 
 app.post('/rooms/add', (req, res) => {
   const { name, type, price, status } = req.body;
@@ -139,10 +136,10 @@ app.post('/rooms/add', (req, res) => {
   });
 });
 
-// Route สำหรับลบห้อง
+// Route สำหรับลบห้อง  
 app.delete('/rooms/delete/:id', (req, res) => {
-  const roomId = req.body.id; 
-  console.log('Deleting room with ID:', roomId); 
+  const roomId = req.params.id; 
+  //console.log('Deleting room with ID:', roomId); 
 
   // ตรวจสอบว่ามีการส่ง roomId มาหรือไม่
   if (!roomId) {
@@ -160,7 +157,7 @@ app.delete('/rooms/delete/:id', (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Room not found' });
     }
-
+    
     res.json({ message: 'Room deleted successfully' });
   });
 });
@@ -200,8 +197,7 @@ app.get('/user-profile', (req, res) => {
 }); 
 
 app.get('/user-edit', (req, res) => {
-  // Extract the token from Authorization Header
-  const token = req.headers.authorization?.split(' ')[1]; // "Bearer [token]"
+  const token = req.headers.authorization?.split(' ')[1]; 
 
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
@@ -278,13 +274,6 @@ app.post('/user-update', (req, res) => {
     console.error('Invalid token:', error);
     res.status(401).json({ message: 'Invalid token' });
   }
+   
+
 });
-
-
-
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-}); 
-
