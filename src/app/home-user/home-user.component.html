@@ -1,0 +1,37 @@
+<div class="home-container">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <button class="nav-button" (click)="navigateToHome()">Home</button>
+      <button class="nav-button" (click)="navigateToMyprofile()">My profile</button>
+    </nav>
+  
+    <header class="header">
+      <h1>Welcome to BU Hotel</h1>
+      <p>Your perfect stay starts here</p>
+    </header>
+  
+    <section class="room-list-section">
+      <h2>Available Rooms</h2>
+      <div class="room-card-container">
+        <!-- Room cards (Limit to 3 rooms per type) -->
+        <div class="room-card" *ngFor="let room of limitedRooms">
+          <img 
+            [src]="getRoomImage(room.type)" 
+            alt="{{ room.type }} Room Image" 
+            class="room-image"
+          />
+  
+          <h3>{{ room.name }}</h3>
+          <p>Type: {{ room.type }}</p>
+          <p>Price: ${{ room.price }}</p>
+          <p>Status: {{ room.status }}</p>
+          <button class="book-button" [disabled]="room.status !== 'available'">
+            Book Now
+          </button> 
+  
+        </div>
+      </div>
+    </section> 
+    
+  </div>
+   <!-- Bootstrap core JS-->

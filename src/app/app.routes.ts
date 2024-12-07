@@ -7,7 +7,9 @@ import { MyprofileComponent } from './myprofile/myprofile.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { AddroomComponent } from './addroom/addroom.component';
 import { EditprofileComponent } from './editprofile/editprofile.component';
-import { EditroomsComponent } from './editrooms/editrooms.component';
+import { EditroomsComponent } from './editrooms/editrooms.component';  
+import { HomeUserComponent } from './home-user/home-user.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,7 +20,8 @@ export const routes: Routes = [
   { path:  'booking', component:BookingsComponent},
   { path: 'addroom',component:AddroomComponent},
   { path: 'editprofile',component:EditprofileComponent},
-  { path: 'editrooms/:id',component:EditroomsComponent},
+  { path: 'editrooms/:id',component:EditroomsComponent}, 
+  {path: 'homeuser',component:HomeUserComponent},
 
 ];
 

@@ -30,7 +30,7 @@ export class LoginComponent {
           } else   {
             console.log('Login successful:', response);
             localStorage.setItem('token', response.token);
-            this.router.navigate(['/profile']); // ไปยังหน้าโปรไฟล์
+            this.router.navigate(['/homeuser']); // ไปยังหน้าโปรไฟล์
           } 
         } catch (error) {
           console.error('Error decoding token:', error);

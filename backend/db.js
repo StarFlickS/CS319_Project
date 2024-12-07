@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
   host: 'localhost',      // Your MySQL host (default: localhost)
   user: 'root',           // Your MySQL username
-  password: 'Ni0931154707',        // Your MySQL password
+  password: '',        // Your MySQL password
 });
 
 // Connect to the MySQL server
@@ -70,21 +70,35 @@ connection.connect((err) => {
 
           // Close the connection
 
-          const insertRoomsQuery = `
-    INSERT INTO rooms (name, type, price, status)
-    VALUES 
-      ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
-      ('Suite Room', 'Suite', 3000.00, 'available'),
-      ('Single Room', 'Single', 800.00, 'available')
-  `;
+          // Check if rooms table already has data
+const checkRoomsQuery = 'SELECT COUNT(*) AS count FROM rooms';
+connection.query(checkRoomsQuery, (err, result) => {
+  if (err) {
+    console.error('Error checking rooms table:', err);
+    return;
+  }
+  const count = result[0].count;
+  if (count === 0) {
+    // If no data exists, insert default data
+    const insertRoomsQuery = `
+      INSERT INTO rooms (name, type, price, status)
+      VALUES 
+        ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
+        ('Suite Room', 'Suite', 3000.00, 'available'),
+        ('Single Room', 'Single', 800.00, 'available')
+    `;
+    connection.query(insertRoomsQuery, (err, result) => {
+      if (err) {
+        console.error('Error inserting data into rooms:', err);
+        return;
+      }
+      console.log('Data successfully inserted into the "rooms" table:', result);
+    });
+  } else {
+    console.log('Rooms table already has data. Skipping insertion.');
+  }
+});
 
-  connection.query(insertRoomsQuery, (err, result) => {
-    if (err) {
-      console.error('Error inserting data into rooms:', err);
-      return;
-    }
-    console.log('Data successfully inserted into the "rooms" table:', result);
-  });
           });
         });
       });
