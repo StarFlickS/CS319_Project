@@ -43,7 +43,8 @@ export class DeluxeComponent implements OnInit {
         .subscribe(
           (response) => {
             this.user = response; // เก็บข้อมูลผู้ใช้ในตัวแปร
-            console.log('User profile:', this.user);
+            this.booking.email = this.user.email; 
+            console.log('User profile:', this.user.id);
           },
           (error) => {
             console.error('Error fetching user profile:', error);
@@ -62,13 +63,27 @@ export class DeluxeComponent implements OnInit {
     });
   }
 
-  // ฟังก์ชันสำหรับการส่งข้อมูลการจอง
   onSubmit(): void {
     if (this.booking.name && this.booking.email && this.booking.checkIn && this.booking.checkOut) {
-      // ส่งข้อมูลการจองห้องไปที่ API
-      this.roomService.bookRoom(this.room.id, this.booking).subscribe(
+      const bookingData = {
+        userId: this.user?.id, // ใช้ id ของผู้ใช้จาก user-profile
+        roomId: this.room.id,   // id ของห้อง
+        bookingName: this.booking.name,
+        bookingEmail: this.booking.email,
+        checkIn: this.booking.checkIn,
+        checkOut: this.booking.checkOut,
+      };
+  
+      console.log("Booking Data:", bookingData);
+  
+      // ส่งข้อมูลการจองไปยัง API
+      this.http.post(
+        'http://localhost:3000/bookings',  // URL ของ API สำหรับการจองห้อง
+        bookingData  // ข้อมูลการจอง
+      ).subscribe(
         (response) => {
           alert('Room booked successfully!');
+          console.log('Booking response:', response);
         },
         (error) => {
           console.error('Error booking room:', error);

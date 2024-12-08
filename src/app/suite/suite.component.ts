@@ -44,6 +44,7 @@ export class SuiteComponent implements OnInit {
         .subscribe(
           (response) => {
             this.user = response; // เก็บข้อมูลผู้ใช้ในตัวแปร
+            this.booking.email = this.user.email; 
             console.log('User profile:', this.user.id);
           },
           (error) => {
@@ -59,17 +60,32 @@ export class SuiteComponent implements OnInit {
     // เรียกข้อมูลห้องทั้งหมดจาก API
     this.roomService.getRooms().subscribe((data) => {
       // กรองห้องประเภท Suite เท่านั้น
-      this.room = data.find((room: Room) => room.type === 'Suite');  // กำหนดประเภทห้อง
+      this.room = data.find((room: Room) => room.type === 'Suite');// กำหนดประเภทห้อง
     });
   }
 
   // ฟังก์ชันสำหรับการส่งข้อมูลการจอง
   onSubmit(): void {
     if (this.booking.name && this.booking.email && this.booking.checkIn && this.booking.checkOut) {
-      // ส่งข้อมูลการจองห้องไปที่ API
-      this.roomService.bookRoom(this.room.id, this.booking).subscribe(
+      const bookingData = {
+        userId: this.user?.id, // ใช้ id ของผู้ใช้จาก user-profile
+        roomId: this.room.id,   // id ของห้อง
+        bookingName: this.booking.name,
+        bookingEmail: this.booking.email,
+        checkIn: this.booking.checkIn,
+        checkOut: this.booking.checkOut,
+      };
+  
+      console.log("Booking Data:", bookingData);
+  
+      // ส่งข้อมูลการจองไปยัง API
+      this.http.post(
+        'http://localhost:3000/bookings',  // URL ของ API สำหรับการจองห้อง
+        bookingData  // ข้อมูลการจอง
+      ).subscribe(
         (response) => {
           alert('Room booked successfully!');
+          console.log('Booking response:', response);
         },
         (error) => {
           console.error('Error booking room:', error);
@@ -80,4 +96,6 @@ export class SuiteComponent implements OnInit {
       alert('Please fill in all the fields.');
     }
   }
+  
+  
 }

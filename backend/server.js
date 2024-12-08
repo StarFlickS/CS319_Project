@@ -296,6 +296,28 @@ app.get('/rooms/type/:type', (req, res) => {
   });
 });
 
+app.post('/bookings', (req, res) => {
+  // การดำเนินการจองห้องที่นี่
+  const { userId, roomId, bookingName, bookingEmail, checkIn, checkOut } = req.body;
+  
+  // ตรวจสอบข้อมูลที่ได้รับ
+  if (!userId || !roomId || !bookingName || !bookingEmail || !checkIn || !checkOut) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  // การบันทึกข้อมูลการจองห้อง
+  const query = `INSERT INTO bookings (user_id, room_id, booking_name, booking_email, check_in, check_out, created_at)
+                 VALUES (?, ?, ?, ?, ?, ?, NOW())`;
+
+  db.query(query, [userId, roomId, bookingName, bookingEmail, checkIn, checkOut], (err, result) => {
+    if (err) {
+      console.error('Error inserting booking:', err);
+      return res.status(500).json({ error: 'Failed to book room' });
+    }
+    res.status(201).json({ message: 'Room booked successfully', bookingId: result.insertId });
+  });
+});
+
 
 const PORT = 3000;
   app.listen(PORT, () => {

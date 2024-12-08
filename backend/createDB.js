@@ -68,20 +68,43 @@ connection.connect((err) => {
           }
           console.log('Table "rooms" created or already exists');
 
-          // Step 5: Insert data into the `rooms` table
-          const insertRoomsQuery = `
-            INSERT INTO rooms (name, type, price, status)
-            VALUES 
-              ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
-              ('Suite Room', 'Suite', 3000.00, 'available'),
-              ('Single Room', 'Single', 800.00, 'available')
+          // Step 5: Create the `bookings` table (new addition)
+          const createBookingsTableQuery = `
+            CREATE TABLE IF NOT EXISTS bookings (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              user_id INT NOT NULL,
+              room_id INT NOT NULL,
+              name VARCHAR(100) NOT NULL,
+              email VARCHAR(100) NOT NULL,
+              check_in DATE NOT NULL,
+              check_out DATE NOT NULL,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              FOREIGN KEY (user_id) REFERENCES users(id),
+              FOREIGN KEY (room_id) REFERENCES rooms(id)
+            )
           `;
-          connection.query(insertRoomsQuery, (err, result) => {
+          connection.query(createBookingsTableQuery, (err, result) => {
             if (err) {
-              console.error('Error inserting data into "rooms" table:', err);
+              console.error('Error creating "bookings" table:', err);
               return;
             }
-            console.log('Data successfully inserted into the "rooms" table:', result);
+            console.log('Table "bookings" created or already exists');
+
+            // Step 6: Insert data into the `rooms` table
+            const insertRoomsQuery = `
+              INSERT INTO rooms (name, type, price, status)
+              VALUES 
+                ('Deluxe Room', 'Deluxe', 1500.00, 'available'),
+                ('Suite Room', 'Suite', 3000.00, 'available'),
+                ('Single Room', 'Single', 800.00, 'available')
+            `;
+            connection.query(insertRoomsQuery, (err, result) => {
+              if (err) {
+                console.error('Error inserting data into "rooms" table:', err);
+                return;
+              }
+              console.log('Data successfully inserted into the "rooms" table:', result);
+            });
           });
         });
       });

@@ -36,8 +36,10 @@ updateRoom(roomData: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/type/${type}`);  // ดึงข้อมูลจาก API ตามประเภทห้อง
   }
 
-  bookRoom(roomId: number, bookingData: any): Observable<any> {
-    return this.http.post<any>(`http://localhost:3000/bookroom/${roomId}`, bookingData);
-  }
+ // room.service.ts
+bookRoom(bookingData: any): Observable<any> {
+  return this.http.post('http://localhost:3000/book-room', bookingData);
+}
+  
 }
 
