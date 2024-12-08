@@ -9,6 +9,9 @@ import { AddroomComponent } from './addroom/addroom.component';
 import { EditprofileComponent } from './editprofile/editprofile.component';
 import { EditroomsComponent } from './editrooms/editrooms.component';  
 import { HomeUserComponent } from './home-user/home-user.component';
+import { SingleComponent } from './single/single.component';
+import { DeluxeComponent } from './deluxe/deluxe.component';
+import { SuiteComponent } from './suite/suite.component';
 
 
 export const routes: Routes = [
@@ -22,6 +25,9 @@ export const routes: Routes = [
   { path: 'editprofile',component:EditprofileComponent},
   { path: 'editrooms/:id',component:EditroomsComponent}, 
   {path: 'homeuser',component:HomeUserComponent},
+  {path: 'rooms/single', component:SingleComponent},
+  {path: "rooms/deluxe",component:DeluxeComponent},
+  {path: "rooms/suite",component:SuiteComponent},
 
 ];
 

@@ -276,6 +276,27 @@ app.post('/user-update', (req, res) => {
     res.status(401).json({ message: 'Invalid token' });
   }
 });
+
+// Route สำหรับดึงข้อมูลห้องตามประเภท
+app.get('/rooms/type/:type', (req, res) => {
+  const roomType = req.params.type;
+
+  const query = 'SELECT * FROM rooms WHERE type = ?';
+  db.query(query, [roomType], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No rooms found for this type' });
+    }
+
+    res.json(results);
+  });
+});
+
+
 const PORT = 3000;
   app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

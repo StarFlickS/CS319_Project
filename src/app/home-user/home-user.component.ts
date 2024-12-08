@@ -13,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomeUserComponent implements OnInit { 
   rooms: any[] = []; // All rooms fetched from the backend
   limitedRooms: any[] = []; // Rooms limited to 3 per type
-  user: any;  // ตัวแปรสำหรับเก็บข้อมูลผู้ใช้
+  user: any;  
 
   constructor(private http: HttpClient, 
     private router: Router,
@@ -70,6 +70,11 @@ export class HomeUserComponent implements OnInit {
       default :
         return 'img/suite.jpg';
     }
+  }
+
+  navigateTORoom(room: any): void {
+    // นำทางไปยังหน้า /rooms/{roomType} โดยที่ room.type จะเป็นพารามิเตอร์
+    this.router.navigate([`/rooms/${room.type.toLowerCase()}`]);
   }
 
 

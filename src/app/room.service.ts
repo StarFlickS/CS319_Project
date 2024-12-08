@@ -13,7 +13,7 @@ export class RoomService {
 
   getRooms(): Observable<any> {
     return this.http.get(this.apiUrl); // Fetch data from the API
-  }
+  } 
 
  getRoomById(roomId: number): Observable<any> {
   return this.http.delete(`http://localhost:3000/rooms/delete/${roomId}`);
@@ -30,6 +30,14 @@ updateRoom(roomData: any): Observable<any> {
 
   deleteRoom(roomId: number): Observable<any> {
     return this.http.delete(`http://localhost:3000/rooms/delete/${roomId}`);
+  }
+
+  getRoomByType(type: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/type/${type}`);  // ดึงข้อมูลจาก API ตามประเภทห้อง
+  }
+
+  bookRoom(roomId: number, bookingData: any): Observable<any> {
+    return this.http.post<any>(`http://localhost:3000/bookroom/${roomId}`, bookingData);
   }
 }
 

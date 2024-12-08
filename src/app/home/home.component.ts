@@ -39,11 +39,12 @@ export class HomeComponent implements OnInit {
   getRoomImage(type: string): string {
     switch (type) {
       case 'Deluxe':
-        return 'img/deluxe.jpg';
+        return 'src/assets/img/deluxe.jpg';
       case 'Suite':
-        return 'img/single.jpg';
+        return 'src/assets/img/single.jpg';
       default :
         return 'img/suite.jpg';
     }
   }
+  
 }
