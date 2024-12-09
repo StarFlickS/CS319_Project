@@ -57,6 +57,10 @@ async function setupDatabase() {
         ('Suite Room', 'Suite', 3000.00, 'available'),
         ('Single Room', 'Single', 800.00, 'available')
     `);
+
+    await db.query(`
+      INSERT INTO users (id, username, email, password) VALUES ('adminbuHotel1234', 'buHotel@gmail.com', 'admin1234')
+      `)
     console.log('Default data inserted into "rooms" table');
   } catch (err) {
     console.error('Error setting up the database:', err);
