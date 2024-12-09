@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise'); // Import the mysql2 library
 const connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: '1.3boxbox',
+    password: 'your_password',
     database: 'bu_hotel' 
 });
 
