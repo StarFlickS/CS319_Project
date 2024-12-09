@@ -13,7 +13,7 @@ async function setupDatabase() {
         const tempConnection = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '1.3boxbox'
+            password: 'your_password'
         });
 
         await tempConnection.query('CREATE DATABASE IF NOT EXISTS bu_hotel');
