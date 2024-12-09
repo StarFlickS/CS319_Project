@@ -18,17 +18,29 @@ export class LoginComponent {
 
   onLogin(): void {
     const loginData = { username: this.username, password: this.password };
-
-    this.http.post('http://localhost:3000/login', loginData).subscribe(
-      (response: any) => {
+    this.http.post('http://localhost:3000/login', loginData).subscribe({
+      next: (response: any) => {
         console.log('Login successful:', response);
-        alert('Login successful!');
+  
+        // Store the token in localStorage
+        localStorage.setItem('jwtToken', response.token);
+  
+        // Redirect based on role
+        if (response.role === 'admin') {
+          alert('Welcome Admin!');
+          this.router.navigate(['/addroom']); // เส้นทางสำหรับ admin
+        } else {
+          this.router.navigate(['/homeuser']); // เส้นทางสำหรับ user
+        }
       },
-      (error) => {
+      error: (error) => {
         console.error('Login failed:', error);
         alert('Login failed. Please check your credentials.');
+      },
+      complete: () => {
+        console.log('Request completed.');
       }
-    )
+    });
   }
 
   navigateToRegister(): void {

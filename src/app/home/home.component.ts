@@ -35,4 +35,15 @@ export class HomeComponent implements OnInit {
   navigateToLogin(): void {
     this.router.navigate(['/login']); // Navigate to Login
   }
+
+  getRoomImage(type: string): string {
+    switch (type) {
+      case 'Deluxe':
+        return 'assets/img/deluxe.jpg';
+      case 'Suite':
+        return 'assets/img/suite.jpg';
+      default :
+        return 'assets/img/single.jpg';
+    }
+  }
 }

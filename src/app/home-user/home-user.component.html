@@ -2,7 +2,7 @@
   <!-- Navigation Bar -->
   <nav class="navbar">
     <button class="nav-button" (click)="navigateToHome()">Home</button>
-    <button class="nav-button" (click)="navigateToLogin()">Login</button>
+    <button class="nav-button" (click)="navigateToMyprofile()">My profile</button>
   </nav>
 
   <header class="header">
@@ -16,7 +16,7 @@
       <!-- Room cards (Limit to 3 rooms per type) -->
       <div class="room-card" *ngFor="let room of limitedRooms">
         <img 
-          [src]="getRoomImage(room.type)"
+          [src]="getRoomImage(room.type)" 
           alt="{{ room.type }} Room Image" 
           class="room-image"
         />
@@ -25,13 +25,12 @@
         <p>Type: {{ room.type }}</p>
         <p>Price: ${{ room.price }}</p>
         <p>Status: {{ room.status }}</p>
-        <button class="book-button" [disabled]="room.status !== 'available'" (click)="navigateToLogin()">
+        <button class="book-button" [disabled]="room.status !== 'available'" (click)="navigateTORoom(room)">
           Book Now
-        </button> 
+        </button>
 
       </div>
     </div>
   </section> 
   
 </div>
- <!-- Bootstrap core JS-->

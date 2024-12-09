@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจองห้องพัก</title>
+    <link rel="stylesheet" href="suite.component.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Book A Room Suite</h1>
+
+        <!-- แสดงข้อมูลห้อง Deluxe -->
+        <div *ngIf="room">
+            <h2>{{ room.name }} - {{ room.type }}</h2>
+            <p>Price: ${{ room.price }}</p>
+            <p>Status: {{ room.status }}</p>
+        </div>
+
+        <!-- ฟอร์มการจองห้อง -->
+        <form id="booking-form" (ngSubmit)="onSubmit()">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" [(ngModel)]="booking.name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" [(ngModel)]="booking.email" required>
+
+            <label for="check-in">Check In:</label>
+            <input type="date" id="check-in" name="check-in" [(ngModel)]="booking.checkIn" required>
+
+            <label for="check-out">Check Out:</label>
+            <input type="date" id="check-out" name="check-out" [(ngModel)]="booking.checkOut" required>
+
+            <button type="submit" [disabled]="room.status !== 'available'">
+                Book Now
+            </button>
+        </form> 
+    </div>
+</body>
+</html>

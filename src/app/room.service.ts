@@ -13,4 +13,21 @@ export class RoomService {
   getRooms(): Observable<any> {
     return this.http.get(this.apiUrl); // Fetch data from the API
   }
+
+  getRoomById(roomId: number): Observable<any> {
+    return this.http.delete(`http://localhost:3000/rooms/delete/${roomId}`);
+  }
+  
+  updateRoom(roomData: any): Observable<any> {
+    const roomId = roomData.id;  
+    return this.http.put<any>(`http://localhost:3000/editrooms/${roomId}`, roomData);  // ส่งข้อมูลอัปเดตไปที่ /editrooms/:id
+  }
+  
+  addRoom(room: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/add`, room);
+  }
+
+  deleteRoom(roomId: number): Observable<any> {
+    return this.http.delete(`http://localhost:3000/rooms/delete/${roomId}`);
+  }
 }
