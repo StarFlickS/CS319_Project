@@ -18,18 +18,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.roomService.getRooms().subscribe((data) => {
-      this.rooms = data;
-
-      // Limit to 3 rooms per type
-      const roomTypes = Array.from(new Set(this.rooms.map((room) => room.type))); // Get unique room types
-      this.limitedRooms = roomTypes.flatMap((type) =>
-        this.rooms.filter((room) => room.type === type).slice(0, 3) // Limit each type to 3 rooms
-      );
+      this.rooms = data; // Assign all rooms to the rooms array
+      this.limitedRooms = this.rooms; // Show all rooms without limitation
     });
-  }
-
-  navigateToHome(): void {
-    this.router.navigate(['/']); // Navigate to Home
   }
 
   navigateToLogin(): void {

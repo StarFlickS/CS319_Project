@@ -300,6 +300,28 @@ app.post('/bookings', async (req, res) => {
   }
 });
 
+app.get('/bookings/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  const query = `
+    SELECT b.id, b.name, b.email, b.check_in, b.check_out, r.name AS room_name, b.created_at
+    FROM bookings b
+    JOIN rooms r ON b.room_id = r.id
+    WHERE b.user_id = ?
+  `;
+
+  try {
+    const [results] = await db.query(query, [userId]);
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No bookings found for this user.' });
+    }
+    res.json(results);
+  } catch (err) {
+    console.error('Error fetching bookings:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {

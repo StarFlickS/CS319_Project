@@ -2,15 +2,16 @@
 <div class="profile">
   <h1>Welcome to your profile</h1>
 
-  <!-- แสดงข้อมูล ID ของผู้ใช้ -->
-  <p *ngIf="user; else loading"><strong>Username :</strong> {{ user?.username }}</p>
-
-  <!-- แสดงข้อมูลวันที่หมดอายุ (exp) ของ token -->
-  <p *ngIf="user; else loading"><strong>Email :</strong> {{ user?.email }}</p>
-
-  <button class="edit-button" (click)="navigateToEditprofile()">
-    Edit Profile
-  </button>
+  <!-- ส่วนข้อมูล Username และ Email พร้อมปุ่ม Edit -->
+  <div class="user-info">
+    <p><strong>Username :</strong> {{ user?.username }}</p>
+    <div class="email-edit">
+      <p><strong>Email :</strong> {{ user?.email }}</p>
+      <button class="edit-button" (click)="navigateToEditprofile()">
+        Edit Profile
+      </button>
+    </div>
+  </div>
 
   <!-- ถ้าไม่มีข้อมูลผู้ใช้หรือยังไม่โหลดข้อมูล -->
   <ng-template #loading>
@@ -19,4 +20,34 @@
 
   <!-- หาก token หมดอายุหรือไม่พบข้อมูลผู้ใช้ -->
   <p *ngIf="!user">Please log in to view your profile.</p>
+
+  <!-- เพิ่มส่วนแสดงประวัติการจอง -->
+  <h2>Your Booking History</h2>
+  <div *ngIf="bookings.length > 0; else noBookings">
+    <table>
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Room Name</th>
+          <th>Check-In</th>
+          <th>Check-Out</th>
+          <th>Booking Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let booking of bookings">
+          <td>{{ booking.id }}</td>
+          <td>{{ booking.room_name }}</td>
+          <td>{{ booking.check_in | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ booking.check_out | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ booking.created_at | date: 'dd/MM/yyyy, h:mm a' }}</td>
+        </tr>
+      </tbody>      
+    </table>
+  </div>
+
+  <!-- ข้อความแสดงเมื่อไม่มีประวัติการจอง -->
+  <ng-template #noBookings>
+    <p>No booking history found.</p>
+  </ng-template>
 </div>
